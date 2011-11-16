@@ -41,8 +41,11 @@ esac
 read -n 1 -p 'Tail portlet log after server log? [y/N] ' tail_portlet_log
 echo
 
-scp $war_file $dest_host:$dest_dir &&
+scp $war_file $dest_host:$dest_dir ||
+    exit 4
 
-ssh $dest_host "mv $dest_dir/${war_file##*/} $dest_dir/.. && tail -f $server_log"
+ssh $dest_host \
+    "mv $dest_dir/${war_file##*/} $dest_dir/.. && tail -f $server_log" ||
+    exit 5
 [[ $tail_portlet_log == [yY] ]] &&
     ssh $dest_host "tail -f $portlet_log"
