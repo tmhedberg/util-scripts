@@ -1,0 +1,24 @@
+#!/bin/bash
+
+# Display the number of cached versions for each package in the pacman cache
+
+ls /var/cache/pacman/pkg |
+awk -F - '
+    
+    {
+        k = ""
+        for (i = 1; i < NF - 2; ++i)
+            k = k $i "-"
+        sub(/-$/, "", k)
+        ++sum[k]
+    }
+
+    END {
+        for (k in sum)
+            print k, sum[k]
+    }
+
+' |
+sort -rk 2 |
+column -t |
+less

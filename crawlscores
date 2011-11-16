@@ -1,0 +1,44 @@
+#!/bin/bash
+
+# Print Dungeon Crawl Stone Soup high score list
+
+{
+    echo ' |Score|Name|Level|Type|Religion|Runes Ascended'
+    for f in `ls -tr ~/.crawl/morgue/morgue-*.txt`; do
+        sed -nr '
+            3{
+                s/([0-9]+)./\1|/
+                s/ \(level ([0-9]+)/|\1/
+                s/,[^,]+$//
+                N
+                s/\s+Began as an? /|/
+                s/ on .*/|/
+                N
+                s/\s+Was an? (.*)\./\1/
+                tg
+                s/|[^|]*$//
+                :g
+                N
+                s/\s+Escaped with the Orb//
+                Th
+                N
+                s/\s+\.{3} and ([[:digit:]]+) runes .*/|\1/
+                :h
+                ti
+                s/\n.*$//
+                :i
+                p
+                q
+            }
+        ' <$f
+    done |
+    sort -nrs |
+    if [[ -n $1 ]]; then
+        head -n $1
+    else
+        cat
+    fi |
+    nl -s \|
+} |
+column -ts \| |
+less -FX

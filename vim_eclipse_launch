@@ -1,0 +1,13 @@
+#!/bin/bash
+
+if [[ $# -eq 0 ]]; then
+	vim --servername ECLIPSE_SERVER "+set dir=~/tmp"
+	exit
+fi
+
+if [[ -n "$(vim --serverlist | grep ECLIPSE_SERVER)" ]]; then
+	vim --servername ECLIPSE_SERVER --remote "$1"
+else
+	echo 'Vim server "ECLIPSE_SERVER" not running' >&2
+	exit 1
+fi

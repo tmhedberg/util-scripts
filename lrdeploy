@@ -1,0 +1,48 @@
+#!/bin/bash
+
+dist_dir=~/flq/dist
+
+usage () {
+    echo "Usage: `basename $0` [WAR file (extension optional)] [dev|uat]" \
+        >&2
+}
+
+if [[ $# -ne 2 ]]; then
+    usage
+    exit 3
+fi
+
+war_file_noext=${1%.war}
+war_file=$dist_dir/$war_file_noext.war
+if ! [[ -e $war_file ]]; then
+    echo "File does not exist: $war_file" >&2
+    exit 1
+fi
+
+case $2 in
+    dev|uat)
+        dest_host=$2
+        portlet_log=/app/logging/portlets/$war_file_noext.log
+        ;;&
+    dev)
+        dest_dir=thedberg/deploy/tmp
+        server_log=thedberg/catalina.out
+        ;;
+    uat)
+        dest_dir=deploy/tmp
+        server_log=catalina.out
+        ;;
+    *)
+        usage
+        exit 2
+        ;;
+esac
+
+read -n 1 -p 'Tail portlet log after server log? [y/N] ' tail_portlet_log
+echo
+
+scp $war_file $dest_host:$dest_dir &&
+
+ssh $dest_host "mv $dest_dir/${war_file##*/} $dest_dir/.. && tail -f $server_log"
+[[ $tail_portlet_log == [yY] ]] &&
+    ssh $dest_host "tail -f $portlet_log"

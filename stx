@@ -1,0 +1,10 @@
+#!/bin/bash
+
+MYTTY=$(tty)
+
+if [[ x"$(echo $MYTTY | grep pts)" != x ]]; then
+	echo 'You can'\''t start X if you'\''re not in a virtual terminal, dummy!'
+	exit 1
+fi
+
+startx -- vt$(echo $MYTTY | grep -o '[[:digit:]]*') $1

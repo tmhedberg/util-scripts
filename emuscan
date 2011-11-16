@@ -1,0 +1,6 @@
+#!/bin/bash
+
+# Emulate a barcode scanner attached to an Intermec printer by writing text
+# strings with proper added spacing to the RS-232 port
+
+echo "$1 " >/dev/ttyS0

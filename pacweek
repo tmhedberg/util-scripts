@@ -1,0 +1,30 @@
+#!/bin/bash
+
+# List Arch Linux packages recently added to the system
+#
+# Usage:
+#
+#     pacweek [<since>]
+#
+# Default interval is 1 week ago.
+#
+# Requires GNU date & combine from moreutils.
+#
+
+[[ $# -gt 0 ]] &&
+    interval="$*" ||
+    interval='1 week ago'
+startd=`date -d "$interval" +%s`
+
+parselog () {
+    awk -v sd=$startd -v pat=$1 '
+        {
+            sub(/^\[/, "", $1)
+            "date -d "$1" +%s" | getline d
+        }
+        d >= sd && $3 == pat { print $4 }
+    ' /var/log/pacman.log 2>/dev/null |
+    sort
+}
+
+combine <(parselog installed) not <(parselog removed)

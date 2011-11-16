@@ -1,0 +1,11 @@
+#!/bin/bash
+
+for pkg in `pacman -Qq`; do
+    size=`
+        pacman -Qi $pkg |
+        grep '^Installed Size' |
+        awk -F '[[:space:]]+:[[:space:]]+' '{print $2}'
+    `
+    echo "$size - $pkg"
+done |  
+sort -hr
