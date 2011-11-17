@@ -23,12 +23,6 @@ case $2 in
     dev|uat)
         dest_host=$2
         portlet_log=/app/logging/portlets/$war_file_noext.log
-        ;;&
-    dev)
-        dest_dir=thedberg/deploy/tmp
-        server_log=thedberg/catalina.out
-        ;;
-    uat)
         dest_dir=deploy/tmp
         server_log=catalina.out
         ;;
