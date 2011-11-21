@@ -43,8 +43,10 @@
 column -ts \| |
 awk '
     NR == 1 { system("tput smso") }
+    NR > 1 { sum += $2 }
     NR > 2 && NR <= 11 { system("tput setaf 250") }
     NR > 11 { system("tput setaf 240") }
     { print }
+    END { print "Mean score: " (sum / (NR - 1)) }
 ' |
 less -FXR
