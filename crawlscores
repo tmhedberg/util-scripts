@@ -41,4 +41,10 @@
     nl -s \|
 } |
 column -ts \| |
-less -FX
+awk '
+    NR == 1 { system("tput smso") }
+    NR > 2 && NR <= 11 { system("tput setaf 250") }
+    NR > 11 { system("tput setaf 240") }
+    { print }
+' |
+less -FXR
