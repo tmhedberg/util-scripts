@@ -19,8 +19,9 @@ if ! [[ -e $war_file ]]; then
     exit 1
 fi
 
+shopt -s extglob
 case $2 in
-    dev|uat)
+    @(dev|uat)?(-app))
         dest_host=$2
         portlet_log=/app/logging/portlets/$war_file_noext.log
         dest_dir=deploy/tmp
