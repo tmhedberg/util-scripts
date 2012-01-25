@@ -1,0 +1,42 @@
+#!/bin/bash -e
+
+case $1 in
+
+    start)
+
+        echo Starting pptpclient...
+        pon seneca
+        while [[ -z `
+            ip link |
+            grep 'ppp0.*UNKNOWN'
+        ` ]]; do
+            sleep 1
+        done
+
+        echo Adding route...
+        ip route add 10.3/16 dev ppp0
+
+        echo Adding name servers...
+        sed -i '
+            1i\
+nameserver 10.3.100.57\
+nameserver 10.3.100.107
+        ' /etc/resolv.conf
+
+        echo Done
+
+        ;;
+
+    stop)
+
+        echo Stopping pptpclient...
+        poff seneca
+
+        echo Removing nameservers...
+        sed -ri '/nameserver 10\.3\.100\.(5|10)7/d' /etc/resolv.conf
+
+        echo Done
+
+        ;;
+
+esac >&2
