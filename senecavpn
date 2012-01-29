@@ -1,8 +1,10 @@
-#!/bin/bash -e
+#!/bin/bash
 
 case $1 in
 
     start)
+
+        set -e
 
         echo Starting pptpclient...
         pon seneca
