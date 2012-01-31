@@ -4,7 +4,10 @@
 
 {
     echo ' |Score|Name|Level|Type|Religion|Runes Ascended'
-    for f in `ls -tr ~/.crawl/morgue/morgue-*.txt`; do
+    for f in `
+        ls -tr ~/.crawl/morgue/morgue-*.txt |
+        xargs grep -L '(Sprint [IV]\+: ".*")'
+    `; do
         sed -nr '
             3{
                 s/([0-9]+)./\1|/
