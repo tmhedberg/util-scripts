@@ -8,10 +8,10 @@ case $1 in
 
         echo Starting pptpclient...
         pon seneca
-        while [[ -z `
-            ip link |
-            grep 'ppp0.*UNKNOWN'
-        ` ]]; do
+        while
+            ! ip link |
+            grep 'ppp0.*UNKNOWN' &>/dev/null
+        do
             sleep 1
         done
 
