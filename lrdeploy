@@ -24,7 +24,7 @@ case $2 in
     @(dev|uat)?(-app))
         dest_host=$2
         dest_dir=deploy/tmp
-        server_log=server.log
+        server_log=catalina.out
         ;;
     *)
         usage
