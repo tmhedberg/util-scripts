@@ -21,16 +21,15 @@ fi
 
 shopt -s extglob
 case $2 in
-    @(dev|uat)?(-app))
-        dest_host=$2
-        dest_dir=deploy/tmp
-        server_log=catalina.out
-        ;;
+    dev-app) server_log=catalina.out ;;
+    uat-app) server_log=server.log ;;
     *)
         usage
         exit 2
         ;;
 esac
+dest_host=$2
+dest_dir=deploy/tmp
 
 scp $war_file $dest_host:$dest_dir ||
     exit 4
