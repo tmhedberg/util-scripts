@@ -1,0 +1,9 @@
+#!/bin/bash
+
+# Convert a Unix timestamp (from the X primary selection) to a human-readable
+# format in the local time zone
+
+date -d @`
+    xclip -o |
+    sed -r 's/[0-9]{3}$/.&/'
+`
