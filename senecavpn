@@ -41,4 +41,9 @@ nameserver 10.3.100.107
 
         ;;
 
+    restart)
+        $0 stop &&
+        $0 start
+        ;;
+
 esac >&2
