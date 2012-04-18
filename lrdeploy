@@ -22,7 +22,7 @@ fi
 shopt -s extglob
 case $2 in
     dev-app) server_log=catalina.out ;;
-    uat-app) server_log=server.log ;;
+    uat-app) server_log=catalina.out ;;
     *)
         usage
         exit 2
