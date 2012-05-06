@@ -1,0 +1,21 @@
+#!/bin/bash
+
+pidfile=~/.olimap.pid
+
+startmutt=false
+case $1 in
+    -x) kill `<$pidfile` ;;
+    -m) startmutt=true ;&
+    *)
+        echo -n 'tmhcc account password: '
+        read -s pass
+        echo
+        echo $pass |
+        offlineimap -k Repository_Remote:remotepassfile=/dev/stdin -u quiet &
+        echo $! >$pidfile
+        if $startmutt; then
+            mutt
+            kill `<$pidfile`
+        fi
+        ;;
+esac
