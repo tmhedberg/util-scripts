@@ -1,6 +1,6 @@
 #!/bin/bash
 
-pidfile=~/.olimap.pid
+pidfile=~/tmp/olimap.pid
 
 quit () {
     kill `<$pidfile`
