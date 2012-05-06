@@ -2,9 +2,15 @@
 
 pidfile=~/.olimap.pid
 
+quit () {
+    kill `<$pidfile`
+    rm $pidfile
+    exit
+}
+
 startmutt=false
 case $1 in
-    -x) kill `<$pidfile` ;;
+    -x) quit ;;
     -m) startmutt=true ;&
     *)
         echo -n 'tmhcc account password: '
@@ -15,7 +21,7 @@ case $1 in
         echo $! >$pidfile
         if $startmutt; then
             mutt
-            kill `<$pidfile`
+            quit
         fi
         ;;
 esac
