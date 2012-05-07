@@ -27,6 +27,7 @@ case $1 in
             echo $pid >$pidfile
             trap exit TERM
             wait $pid
+            echo -e "\a"
         done &
         respawn_pid=$!
 
