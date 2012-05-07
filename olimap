@@ -3,6 +3,7 @@
 pidfile=~/tmp/olimap.pid
 
 quit () {
+    kill $respawn_pid
     kill `<$pidfile`
     rm $pidfile
     exit
@@ -13,15 +14,26 @@ case $1 in
     -x) quit ;;
     -m) startmutt=true ;&
     *)
-        echo -n 'tmhcc account password: '
+
+        echo -n 'tmh.cc account password: '
         read -s pass
         echo
-        echo $pass |
-        offlineimap -k Repository_Remote:remotepassfile=/dev/stdin -u quiet &
-        echo $! >$pidfile
+
+        while :; do
+            echo $pass |
+            offlineimap -k Repository_Remote:remotepassfile=/dev/stdin \
+                -u quiet &>/dev/null &
+            pid=$!
+            echo $pid >$pidfile
+            trap exit TERM
+            wait $pid
+        done &
+        respawn_pid=$!
+
         if $startmutt; then
             mutt
             quit
         fi
+
         ;;
 esac
