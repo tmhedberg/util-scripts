@@ -22,7 +22,8 @@ case $1 in
         while :; do
             echo $pass |
             offlineimap -k Repository_Remote:remotepassfile=/dev/stdin \
-                -u quiet &>/dev/null &
+                -u quiet 2>&1 |
+            ts >/tmp/olimap_$USER.log &
             pid=$!
             echo $pid >$pidfile
             trap exit TERM
