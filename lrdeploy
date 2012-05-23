@@ -21,8 +21,7 @@ fi
 
 shopt -s extglob
 case $2 in
-    dev-app) server_log=catalina.out ;;
-    uat-app) server_log=catalina.out ;;
+    dev-app|uat-app) server_log=catalina.out ;;
     *)
         usage
         exit 2
@@ -34,5 +33,7 @@ dest_dir=deploy/tmp
 scp $war_file $dest_host:$dest_dir ||
     exit 4
 
-ssh $dest_host \
-    "mv $dest_dir/${war_file##*/} $dest_dir/.. && tail -f $server_log"
+ssh $dest_host "
+    mv $dest_dir/${war_file##*/} $dest_dir/.. &&
+    tail -f $server_log
+"
