@@ -1,0 +1,4 @@
+#!/bin/bash
+
+cd ~/.wine32/drive_c/Program\ Files/Spelunky
+WINEARCH=win32 WINEPREFIX=~/.wine32 wine Spelunky.exe
