@@ -18,6 +18,6 @@ main = do
                 "offlineimap -o -k Repository_Remote:remotepassfile=/dev/stdin")
                 {std_in = CreatePipe}
         hPutStrLn inh passwd
-        hFlush inh
+        hClose inh
         waitForProcess ph
         getLine
