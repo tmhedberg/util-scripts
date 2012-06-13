@@ -1,0 +1,23 @@
+#!/usr/bin/runhaskell
+
+import Control.Monad
+
+import System.IO
+import System.Process
+
+main = do
+    putStr "Password: "
+    hFlush stdout
+    hSetEcho stdin False
+    passwd <- getLine
+    putStr "\n\n"
+    hSetEcho stdin True
+    forever $ do
+        (Just inh, _, _, ph) <- createProcess $
+            (shell
+                "offlineimap -o -k Repository_Remote:remotepassfile=/dev/stdin")
+                {std_in = CreatePipe}
+        hPutStrLn inh passwd
+        hFlush inh
+        waitForProcess ph
+        getLine
