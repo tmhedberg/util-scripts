@@ -1,6 +1,6 @@
 #!/bin/bash
 
-dist_dir=~/flq/dist
+dist_dir=/app/liferay_sdk_61/dist
 
 usage () {
     echo "Usage: `basename $0` [WAR file (extension optional)] [dev|uat]" \
