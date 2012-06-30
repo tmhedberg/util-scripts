@@ -4,7 +4,7 @@ timespec=$1
 shift
 
 echo "
-    DISPLAY=$DISPLAY zenity --info --text '$*' 2>/dev/null ||
+    DISPLAY=$DISPLAY zenity --info --text \"$*\" 2>/dev/null ||
     echo -e \"\\a\\n\\n*** REMINDER ***\\n$*\\n****************\\n\" >`tty`
 " |
 at "$timespec" 2>&1 |
