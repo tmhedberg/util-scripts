@@ -1,0 +1,10 @@
+#!/bin/bash
+
+timespec=$1
+shift
+echo "
+    DISPLAY=$DISPLAY zenity --info --text '$*' 2>/dev/null ||
+    echo -e \"\\n\\n*** REMINDER ***\\n$*\\n****************\\n\" >`tty`
+" |
+at "$timespec" 2>&1 |
+tail -n +2
