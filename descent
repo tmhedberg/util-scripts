@@ -1,0 +1,3 @@
+#!/bin/bash
+
+dosbox ~/.wine32/drive_c/Program\ Files/GOG.com/Descent\ and\ Descent\ 2/Descent/DESCENTR.EXE
