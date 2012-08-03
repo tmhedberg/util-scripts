@@ -1,7 +1,7 @@
 #!/bin/bash
 
 if [[ $# -eq 0 ]]; then
-	vim --servername ECLIPSE_SERVER "+set dir=~/tmp"
+	vim --servername ECLIPSE_SERVER "+set dir=~/tmp" "+set wildignore+=*.class"
 	exit
 fi
 
