@@ -40,7 +40,7 @@ organizeImports s =
     in unlines pre ++ display (map categorize $ rmBlanks is) ++ unlines post
 
 rmBlanks :: [String] -> [String]
-rmBlanks = filter (not . isBlank)
+rmBlanks = filter $ not . isBlank
 
 isBlank :: String -> Bool
 isBlank = all isSpace
