@@ -1,0 +1,83 @@
+#!/usr/bin/runhaskell
+
+import Control.Category ((>>>))
+
+import Data.Char
+import Data.List
+import Data.List.Split
+import Data.Monoid
+
+data Import = JavaImport [String]
+            | JavaxImport [String]
+            | OtherImport {otherHost :: (String, String), otherRest :: [String]}
+    deriving Eq
+
+instance Ord Import where
+    JavaImport _ `compare` JavaImport _ = EQ
+    JavaImport _ `compare` _ = LT
+    JavaxImport _ `compare` JavaImport _ = GT
+    JavaxImport _ `compare` JavaxImport _ = EQ
+    JavaxImport _ `compare` _ = LT
+    OtherImport host1 rest1 `compare` OtherImport host2 rest2 =
+        host1 `compare` host2 <> rest1 `compare` rest2
+    OtherImport _ _ `compare` _ = GT
+
+data Line = Import Import | Blank
+
+main = fmap organizeImports getContents >>= putStr
+
+extractImports :: [String] -> ([String], [String], [String])
+extractImports ls = let (pre, rest) = break isImport ls
+                        (is, post) = span (\s -> isImport s || isBlank s) rest
+                    in (pre, is, post)
+    where isImport = isPrefixOf "import "
+
+organizeImports :: String -> String
+organizeImports s =
+    let (pre, is, post) = extractImports $ lines s
+    in unlines pre ++ display (map categorize $ rmBlanks is) ++ unlines post
+
+rmBlanks :: [String] -> [String]
+rmBlanks = filter (not . isBlank)
+
+isBlank :: String -> Bool
+isBlank = all isSpace
+
+categorize :: String -> Import
+categorize s
+    | "import java." `isPrefixOf` s = JavaImport $ splitOn "." $ drop 12 s
+    | "import javax." `isPrefixOf` s = JavaxImport $ splitOn "." $ drop 13 s
+    | otherwise = let tld:dom:rest = splitOn "." $ drop 7 s
+                  in OtherImport (tld, dom) rest
+
+display :: [Import] -> String
+display = sort >>> space >>> map render >>> unlines
+
+space :: [Import] -> [Line]
+space [] = []
+space is@(JavaImport _ : _) = sep isJavaImport is
+space is@(JavaxImport _ : _) = sep isJavaxImport is
+space is@(OtherImport host _ : _) =
+    sep (\i -> isOtherImport i && otherHost i == host) is
+
+sep :: (Import -> Bool) -> [Import] -> [Line]
+sep p is = let (a, b) = span p is in map Import a ++ [Blank] ++ space b
+
+isJavaImport :: Import -> Bool
+isJavaImport (JavaImport _) = True
+isJavaImport _ = False
+
+isJavaxImport :: Import -> Bool
+isJavaxImport (JavaxImport _) = True
+isJavaxImport _ = False
+
+isOtherImport :: Import -> Bool
+isOtherImport (OtherImport _ _) = True
+isOtherImport _ = False
+
+render :: Line -> String
+render Blank = ""
+render (Import (JavaImport rest)) = "import java." ++ intercalate "." rest
+render (Import (JavaxImport rest)) = "import javax." ++ intercalate "." rest
+render (Import (OtherImport (tld, dom) rest)) =
+    "import " ++ intercalate "." (tld:dom:rest)
