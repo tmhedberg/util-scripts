@@ -9,7 +9,9 @@ import Data.Monoid
 
 data Import = JavaImport [String]
             | JavaxImport [String]
-            | OtherImport {otherHost :: (String, String), otherRest :: [String]}
+            | OtherImport { otherDomain :: (String, String)
+                          , otherRest :: [String]
+                          }
     deriving Eq
 
 instance Ord Import where
@@ -18,8 +20,8 @@ instance Ord Import where
     JavaxImport _ `compare` JavaImport _ = GT
     JavaxImport _ `compare` JavaxImport _ = EQ
     JavaxImport _ `compare` _ = LT
-    OtherImport host1 rest1 `compare` OtherImport host2 rest2 =
-        host1 `compare` host2 <> rest1 `compare` rest2
+    OtherImport domain1 rest1 `compare` OtherImport domain2 rest2 =
+        domain1 `compare` domain2 <> rest1 `compare` rest2
     OtherImport _ _ `compare` _ = GT
 
 data Line = Import Import | Blank
@@ -57,8 +59,8 @@ space :: [Import] -> [Line]
 space [] = []
 space is@(JavaImport _ : _) = sep isJavaImport is
 space is@(JavaxImport _ : _) = sep isJavaxImport is
-space is@(OtherImport host _ : _) =
-    sep (\i -> isOtherImport i && otherHost i == host) is
+space is@(OtherImport domain _ : _) =
+    sep (\i -> isOtherImport i && otherDomain i == domain) is
 
 sep :: (Import -> Bool) -> [Import] -> [Line]
 sep p is = let (a, b) = span p is in map Import a ++ [Blank] ++ space b
