@@ -1,5 +1,7 @@
 #!/usr/bin/runhaskell
 
+-- Requires package `split`
+
 import Control.Category ((>>>))
 
 import Data.Char
