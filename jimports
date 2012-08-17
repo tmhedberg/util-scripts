@@ -63,15 +63,11 @@ space is@(OtherImport host _ : _) =
 sep :: (Import -> Bool) -> [Import] -> [Line]
 sep p is = let (a, b) = span p is in map Import a ++ [Blank] ++ space b
 
-isJavaImport :: Import -> Bool
+isJavaImport, isJavaxImport, isOtherImport :: Import -> Bool
 isJavaImport (JavaImport _) = True
 isJavaImport _ = False
-
-isJavaxImport :: Import -> Bool
 isJavaxImport (JavaxImport _) = True
 isJavaxImport _ = False
-
-isOtherImport :: Import -> Bool
 isOtherImport (OtherImport _ _) = True
 isOtherImport _ = False
 
