@@ -1,8 +1,8 @@
 #!/bin/bash
 
 if [[ $# -eq 0 ]]; then
-    vim --servername ECLIPSE_SERVER "+set dir=~/tmp" "+set wildignore+=*.class"
-    exit
+    exec vim --servername ECLIPSE_SERVER "+set dir=~/tmp" \
+        "+set wildignore+=*.class"
 fi
 
 if [[ -n "$(vim --serverlist | grep ECLIPSE_SERVER)" ]]; then
