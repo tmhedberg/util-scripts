@@ -2,7 +2,10 @@
 
 import Control.Monad
 
+import Data.Time
+
 import System.IO
+import System.Locale
 import System.Process
 
 main = do
@@ -20,4 +23,8 @@ main = do
         hPutStrLn inh passwd
         hClose inh
         waitForProcess ph
+        showTime >>= putStrLn . (" *** at "++)
         getLine
+
+showTime :: IO String
+showTime = fmap (formatTime defaultTimeLocale "%H:%M:%S") getZonedTime
