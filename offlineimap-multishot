@@ -16,10 +16,11 @@ main = do
     putStr "\n\n"
     hSetEcho stdin True
     forever $ do
-        (Just inh, _, _, ph) <- createProcess $
-            (shell
-                "offlineimap -o -k Repository_Remote:remotepassfile=/dev/stdin")
-                {std_in = CreatePipe}
+        (Just inh, _, _, ph) <-
+            createProcess $
+                (shell
+                    "offlineimap -o -k Repository_Remote:remotepassfile=/dev/stdin")
+                    {std_in = CreatePipe}
         hPutStrLn inh passwd
         hClose inh
         waitForProcess ph
