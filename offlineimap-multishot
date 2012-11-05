@@ -1,9 +1,12 @@
 #!/usr/bin/runhaskell
 
+{-# LANGUAGE LambdaCase #-}
+
 import Control.Monad
 
 import Data.Time
 
+import System.Exit
 import System.IO
 import System.Locale
 import System.Process
@@ -23,7 +26,8 @@ main = do
                     {std_in = CreatePipe}
         hPutStrLn inh passwd
         hClose inh
-        waitForProcess ph
+        waitForProcess ph >>= \case ExitSuccess -> return ()
+                                    ExitFailure _ -> putChar '\a'
         showTime >>= putStrLn . (" *** at "++)
         getLine
 
