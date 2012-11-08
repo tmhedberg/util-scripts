@@ -59,7 +59,7 @@ sed -e '/<<<<<<</,/^=======$/d' -e '/>>>>>>>/d' $MERGED > $RCONFL
 # Fire up vimdiff
 $cmd -f -R -d $LCONFL $RCONFL \
     -c ":set noro" \
-    -c ":tabe $LOCAL" -c ":vert diffs $BASE" -c ":vert diffs $REMOTE" \
+    -c ":tabe $REMOTE" -c ":vert diffs $BASE" -c ":vert diffs $LOCAL" \
     -c ":winc t" -c ":tabe $MERGED" -c ":tabfir"
 
 EC=$?
