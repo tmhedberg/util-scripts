@@ -1,0 +1,24 @@
+#!/usr/bin/runhaskell
+
+{-# LANGUAGE OverloadedStrings #-}
+
+import Control.Arrow
+
+import Data.List
+import Data.Text as T hiding (map)
+import Data.Text.IO as TIO
+
+main = TIO.readFile "PKGBUILD" >>= TIO.writeFile "PKGBUILD" . bumpPkgrel
+
+bumpPkgrel :: Text -> Text
+bumpPkgrel = T.unlines
+           . map (\line -> if isPkgrelLine line then bump line else line)
+           . T.lines
+
+isPkgrelLine :: Text -> Bool
+isPkgrelLine = T.isPrefixOf "pkgrel="
+
+bump :: Text -> Text
+bump = T.splitAt 7
+   >>> second (read . unpack >>> (+1) >>> pack . show)
+   >>> uncurry append
