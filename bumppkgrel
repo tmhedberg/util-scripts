@@ -4,7 +4,6 @@
 
 import Control.Arrow
 
-import Data.List
 import Data.Text as T hiding (map)
 import Data.Text.IO as TIO
 
