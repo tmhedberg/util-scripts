@@ -19,5 +19,5 @@ isPkgrelLine = T.isPrefixOf "pkgrel="
 
 bump :: Text -> Text
 bump = T.splitAt 7
-   >>> second (read . unpack >>> (+1) >>> pack . show)
+   >>> second (unpack >>> read >>> (+1) >>> show >>> pack)
    >>> uncurry append
