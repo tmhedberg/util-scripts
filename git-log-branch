@@ -1,0 +1,19 @@
+#!/bin/bash
+
+# Log commits which are reachable from the branch specified as the argument to
+# this script, and not reachable from any other branches in the repository
+
+git log $(
+    git rev-list $1 |
+    while read commit; do
+        if
+            [[ `
+                git branch --contains $commit |
+                wc -l
+            ` -gt 1 ]]
+        then
+            echo $commit
+            break
+        fi
+    done
+)..$1
