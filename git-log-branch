@@ -1,10 +1,14 @@
 #!/bin/bash
 
-# Log commits which are reachable from the branch specified as the argument to
-# this script, and not reachable from any other branches in the repository
+# Log commits which are reachable from the branch specified as the first
+# argument to this script, and not reachable from any other branches in the
+# repository. Additional arguments provided beyond the first are passed to the
+# underlying `git log` command
 
-git log $(
-    git rev-list $1 |
+ref=$1
+shift
+git log "$@" $(
+    git rev-list $ref |
     while read commit; do
         if
             [[ `
@@ -16,4 +20,4 @@ git log $(
             break
         fi
     done
-)..$1
+)..$ref
