@@ -5,8 +5,12 @@
 # repository. Additional arguments provided beyond the first are passed to the
 # underlying `git log` command
 
-ref=$1
-shift
+if [[ -n $1 ]]; then
+    ref=$1
+    shift
+else
+    ref=HEAD
+fi
 git log "$@" $(
     git rev-list $ref |
     while read commit; do
