@@ -18,7 +18,12 @@ git log "$@" $(
             [[ `
                 git branch --contains $commit |
                 wc -l
-            ` -gt 1 ]]
+            ` -gt 1 ]] ||
+                [[ `
+                    git cat-file -p $commit |
+                    sed /^$/q |
+                    grep -c ^parent
+                ` -gt 1 ]]
         then
             echo $commit
             break
