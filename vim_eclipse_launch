@@ -5,8 +5,14 @@ if [[ $# -eq 0 ]]; then
         "+set wildignore+=*.class"
 fi
 
+remote_opt=--remote
+if [[ $1 == _BLOCK ]]; then
+    remote_opt=$remote_opt-wait
+    shift
+fi
+
 if [[ -n "$(vim --serverlist | grep ECLIPSE_SERVER)" ]]; then
-    vim --servername ECLIPSE_SERVER --remote "$1"
+    vim --servername ECLIPSE_SERVER $remote_opt "$@"
 else
     echo 'Vim server "ECLIPSE_SERVER" not running' >&2
     exit 1
