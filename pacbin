@@ -1,0 +1,18 @@
+#!/usr/bin/bash
+
+# List all executables owned by a pacman package
+#
+# Assumes all executables reside in /usr/bin, which should be the case for all
+# modern Arch Linux packages.
+
+if [[ $# -ne 1 ]]; then
+  echo "Usage: $0 [package name]" >&2
+  exit 1
+fi
+
+pacman -Qlq $1 |
+sed -nr '
+  s/^\/usr\/bin\/(.)/\1/
+  T
+  p
+'
