@@ -1,0 +1,5 @@
+#!/bin/bash
+
+tput hs &&
+  echo -e `tput tsl`Mutt`tput fsl`
+exec /usr/bin/mutt
