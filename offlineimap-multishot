@@ -6,12 +6,14 @@ import Control.Monad
 
 import Data.Time
 
+import System.Console.ANSI
 import System.Exit
 import System.IO
 import System.Locale
 import System.Process
 
 main = do
+    setTitle "offlineimap-multishot"
     putStr "Password: "
     hFlush stdout
     hSetEcho stdin False
