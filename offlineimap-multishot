@@ -13,25 +13,23 @@ import System.Locale
 import System.Process
 
 main = do
-    setTitle "offlineimap-multishot"
-    putStr "Password: "
-    hFlush stdout
-    hSetEcho stdin False
-    passwd <- getLine
-    putStr "\n\n"
-    hSetEcho stdin True
-    forever $ do
-        (Just inh, _, _, ph) <-
-            createProcess $
-                (shell
-                    "offlineimap -o -k Repository_Remote:remotepassfile=/dev/stdin")
-                    {std_in = CreatePipe}
-        hPutStrLn inh passwd
-        hClose inh
-        waitForProcess ph >>= \case ExitSuccess -> return ()
-                                    ExitFailure _ -> putChar '\a'
-        showTime >>= putStrLn . (" *** at "++)
-        getLine
+  setTitle "offlineimap-multishot"
+  putStr "Password: "
+  hFlush stdout
+  hSetEcho stdin False
+  passwd <- getLine
+  putStr "\n\n"
+  hSetEcho stdin True
+  forever $ do
+    (Just inh, _, _, ph) <- createProcess $
+      (shell "offlineimap -o -k Repository_Remote:remotepassfile=/dev/stdin")
+        {std_in = CreatePipe}
+    hPutStrLn inh passwd
+    hClose inh
+    waitForProcess ph >>= \case ExitSuccess -> return ()
+                                ExitFailure _ -> putChar '\a'
+    showTime >>= putStrLn . (" *** at "++)
+    getLine
 
 showTime :: IO String
 showTime = fmap (formatTime defaultTimeLocale "%H:%M:%S") getZonedTime
