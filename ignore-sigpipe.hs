@@ -28,6 +28,8 @@
  - intended effect:
  -
  -     ghc -O2 -threaded ignore-sigpipe
+ -
+ - Required packages: base, bytestring, deepseq, unix
  -}
 
 import Control.Concurrent
